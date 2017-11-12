@@ -10,26 +10,26 @@ class Map
   end
 
   def draw(window)
-    tiles.each { |row| row.each { |tile| tile.draw(window) } }
+    tiles.each { |row| row.each { |tile| tile.draw } }
   end
 
   def click_on(x, y)
     puts "- x: #{x}, y: #{y} - Tile: #{(x/Tile.size).to_i}, #{(y/Tile.size).to_i} "
-    tiles[(y/Tile.size).to_i][(x/Tile.size).to_i].on_click
+    tiles[(x/Tile.size).to_i][(y/Tile.size).to_i].on_click
   end
 
   private
 
   def initialize_tiles
-    m = 0
-    size_y.times do
-      n = 0
-      tiles[m] = []
-      size_x.times do
-        tiles[m] << Tile.new(n * tile_size, m * tile_size)
-        n += 1
+    x_i = 0
+    size_x.times do
+      y_i = 0
+      tiles[x_i] = []
+      size_y.times do
+        tiles[x_i] << Tile.new(x_i * tile_size, y_i * tile_size)
+        y_i += 1
       end
-      m += 1
+      x_i += 1
     end
     @tiles
   end
