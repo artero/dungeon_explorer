@@ -25,6 +25,14 @@ class Game < Gosu::Window
     @map.draw(self)
   end
 
+  def button_down (id)
+    case id
+    when Gosu::MsLeft
+      puts 'Left Click:'
+      @map.click_on(self.mouse_x, self.mouse_y)
+    end
+  end
+
   def needs_cursor?
     true
   end

@@ -10,7 +10,12 @@ class Map
   end
 
   def draw(window)
-    tiles.each { |tile| tile.draw(window) }
+    tiles.each { |row| row.each { |tile| tile.draw(window) } }
+  end
+
+  def click_on(x, y)
+    puts "- x: #{x}, y: #{y} - Tile: #{(x/Tile.size).to_i}, #{(y/Tile.size).to_i} "
+    tiles[(y/Tile.size).to_i][(x/Tile.size).to_i].on_click
   end
 
   private
@@ -19,8 +24,9 @@ class Map
     m = 0
     size_y.times do
       n = 0
+      tiles[m] = []
       size_x.times do
-        tiles << Tile.new(n * tile_size, m * tile_size)
+        tiles[m] << Tile.new(n * tile_size, m * tile_size)
         n += 1
       end
       m += 1

@@ -26,6 +26,10 @@ class Tile
     )
   end
 
+  def on_click
+    @color = Gosu::Color::GREEN
+  end
+
   private
 
   # (x1, y1)             (x2, y2)
