@@ -3,21 +3,24 @@ class Tile
   DEACTIVE_TIME = 300
   STATUS = %i[unknown inactive active].freeze
 
-  attr_reader :x, :y, :color, :deactive_at, :status
+  attr_reader :x, :y, :deactive_at, :status
 
-  def initialize(x, y, options = {})
-    @color = options[:color] || Gosu::Color::RED
-    positioning_to(x, y)
-    forget
-  end
-
-  def positioning_to(x, y)
+  def initialize(x, y, _options = {})
     @x = x
     @y = y
+    initial_status
   end
 
   def self.size
     SIZE
+  end
+
+  def know?
+    status != :unknown
+  end
+
+  def explorable?
+    true
   end
 
   def draw(z = 1)
@@ -47,9 +50,11 @@ class Tile
     end
   end
 
-  def know?
-    status != :unknown
+  def neighbour_activated
+    deactive
   end
+
+  private
 
   def active
     @deactive_at = Gosu.milliseconds + DEACTIVE_TIME
@@ -58,10 +63,10 @@ class Tile
     puts "set status to #{status} from #{Gosu.milliseconds} to #{deactive_at}"
   end
 
-  private
+  def nothing_to_do; end
 
   def deactive
-    @image = Gosu::Image.new('asets/images/tile_basic.png')
+    @image = Gosu::Image.new(deactive_image)
     @deactive_at = nil
     @status = :inactive
     puts "Set status to #{status} at #{Gosu.milliseconds}"
@@ -72,6 +77,4 @@ class Tile
     @status = :unknown
     puts "Set status to #{status} at #{Gosu.milliseconds}"
   end
-
-  def nothing_to_do; end
 end
