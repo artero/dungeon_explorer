@@ -1,12 +1,14 @@
 class Tile
   SIZE = 64
+  DEACTIVE_TIME = 300
+  STATUS = %i[unknown inactive active].freeze
 
-  attr_reader :x, :y, :color
+  attr_reader :x, :y, :color, :deactive_at, :status
 
   def initialize(x, y, options = {})
     @color = options[:color] || Gosu::Color::RED
-    @image = Gosu::Image.new('asets/images/tile_basic.png')
     positioning_to(x, y)
+    forget
   end
 
   def positioning_to(x, y)
@@ -19,47 +21,53 @@ class Tile
   end
 
   def draw(z = 1)
-    # window.draw_quad(
-    #   x1, y1, color,
-    #   x2, y2, color,
-    #   x3, y3, color,
-    #   x4, y4, color
-    # )
     @image.draw_rot(x + SIZE / 2, y + SIZE / 2, z, 0)
   end
 
-  def on_click
-    @image = Gosu::Image.new('asets/images/tile_selected.png')
+  def update
+    case status
+    when :unknown
+      nothing_to_do
+    when :inactive
+      nothing_to_do
+    when :active
+      deactive unless deactive_at
+      deactive if deactive_at && Gosu.milliseconds > deactive_at
+    end
   end
 
-  # private
+  def actioning
+    case status
+    when :inactive
+      active
+    when :unknown
+      deactive
+    when :active
+      nothing_to_do
+    end
+  end
 
-  # # (x1, y1)             (x2, y2)
-  # #     +-------------------+
-  # #     |                   |
-  # #     |       (x, y)      |
-  # #     |         +         |
-  # #     |                   |
-  # #     +-------------------+
-  # # (x4, y4)             (x3, y3)
+  private
 
-  # def x1
-  #   @x
-  # end
-  # alias x4 x1
+  def active
+    @deactive_at = Gosu.milliseconds + DEACTIVE_TIME
+    @image = Gosu::Image.new('asets/images/tile_selected.png')
+    @status = :active
+    puts "set status to #{status} from #{Gosu.milliseconds} to #{deactive_at}"
+  end
 
-  # def x2
-  #   @x + SIZE
-  # end
-  # alias x3 x2
+  def deactive
+    @image = Gosu::Image.new('asets/images/tile_basic.png')
+    @deactive_at = nil
+    @status = :inactive
+    puts "Set status to #{status} at #{Gosu.milliseconds}"
+  end
 
-  # def y1
-  #   @y
-  # end
-  # alias y2 y1
+  def forget
+    @image = Gosu::Image.new('asets/images/tile_unknown.png')
+    @status = :unknown
+    puts "Set status to #{status} at #{Gosu.milliseconds}"
+  end
 
-  # def y4
-  #   @y + SIZE
-  # end
-  # alias y3 y4
+  def nothing_to_do; end
 end

@@ -18,18 +18,18 @@ class Game < Gosu::Window
   end
 
   def update
-    # ...
+    @map.update
   end
 
   def draw
-    @map.draw(self)
+    @map.draw
   end
 
   def button_down (id)
     case id
     when Gosu::MsLeft
       puts 'Left Click:'
-      @map.click_on(self.mouse_x, self.mouse_y)
+      @map.click_on(mouse_x, mouse_y)
     end
   end
 

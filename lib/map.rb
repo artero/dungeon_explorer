@@ -1,40 +1,50 @@
 class Map
-  attr_reader :size_x, :size_y, :line_size, :tiles
+  attr_reader :size_x, :size_y, :tiles
 
   def initialize(**options)
     @size_x = options[:size_x] || 10
     @size_y = options[:size_y] || 10
-    @line_size = options[:line_size] || 1
     @tiles = []
     initialize_tiles
   end
 
-  def draw(window)
-    tiles.each { |row| row.each { |tile| tile.draw } }
+  def draw
+    tiles.each(&:draw)
+  end
+
+  def update
+    tiles.each(&:update)
   end
 
   def click_on(x, y)
-    puts "- x: #{x}, y: #{y} - Tile: #{(x/Tile.size).to_i}, #{(y/Tile.size).to_i} "
-    tiles[(x/Tile.size).to_i][(y/Tile.size).to_i].on_click
+    tiles[tile_num(x, y)].actioning
   end
+
 
   private
 
+  def tile_num(x, y)
+    pos_x = (x / tile_size).to_i
+    pos_y = (y / tile_size).to_i
+
+    # puts "- x: #{x}, y: #{y} - Tile: #{tile_position} => (#{pos_x}, #{pos_y}))"
+    pos_x + ((pos_y % size_y) * size_x)
+  end
+
   def initialize_tiles
-    x_i = 0
-    size_x.times do
-      y_i = 0
-      tiles[x_i] = []
-      size_y.times do
-        tiles[x_i] << Tile.new(x_i * tile_size, y_i * tile_size)
-        y_i += 1
+    y_i = 0
+    size_y.times do
+      x_i = 0
+      size_x.times do
+        tiles << Tile.new(x_i * tile_size, y_i * tile_size)
+        x_i += 1
       end
-      x_i += 1
+      y_i += 1
     end
     @tiles
   end
 
   def tile_size
-    Tile.size + line_size
+    Tile.size
   end
 end
