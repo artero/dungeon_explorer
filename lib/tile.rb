@@ -47,7 +47,9 @@ class Tile
     end
   end
 
-  private
+  def know?
+    status != :unknown
+  end
 
   def active
     @deactive_at = Gosu.milliseconds + DEACTIVE_TIME
@@ -55,6 +57,8 @@ class Tile
     @status = :active
     puts "set status to #{status} from #{Gosu.milliseconds} to #{deactive_at}"
   end
+
+  private
 
   def deactive
     @image = Gosu::Image.new('asets/images/tile_basic.png')

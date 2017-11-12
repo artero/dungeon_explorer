@@ -6,6 +6,7 @@ class Map
     @size_y = options[:size_y] || 10
     @tiles = []
     initialize_tiles
+    generate_start_title
   end
 
   def draw
@@ -17,18 +18,23 @@ class Map
   end
 
   def click_on(x, y)
-    tiles[tile_num(x, y)].actioning
-  end
-
-
-  private
-
-  def tile_num(x, y)
     pos_x = (x / tile_size).to_i
     pos_y = (y / tile_size).to_i
 
+    if some_closed_know?(pos_x, pos_y)
+      tile(pos_x, pos_y).actioning
+    end
+  end
+
+  private
+
+  def generate_start_title
+    tiles.sample.active
+  end
+
+  def tile(pos_x, pos_y)
     # puts "- x: #{x}, y: #{y} - Tile: #{tile_position} => (#{pos_x}, #{pos_y}))"
-    pos_x + ((pos_y % size_y) * size_x)
+    tiles[pos_x + ((pos_y % size_y) * size_x)]
   end
 
   def initialize_tiles
@@ -46,5 +52,10 @@ class Map
 
   def tile_size
     Tile.size
+  end
+
+  def some_closed_know?(pos_x, pos_y)
+    tile(pos_x-1, pos_y)&.know? || tile(pos_x+1, pos_y)&.know? ||
+      tile(pos_x, pos_y-1)&.know? || tile(pos_x, pos_y+1)&.know?
   end
 end

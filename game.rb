@@ -11,9 +11,9 @@ class Game < Gosu::Window
 
   def initialize
     super WITHD, HEIGHT
-    self.caption = "Gosu Tutorial Game"
+    self.caption = 'Game'
 
-    @map = Map.new size_x: 9,
+    @map = Map.new size_x: 10,
                    size_y: 7
   end
 
