@@ -1,6 +1,6 @@
 # dungeon_explorer
 
-## Installatio
+## Installation
 
 Installs the [Gosu dependencies](https://github.com/gosu/gosu/wiki)
 
