@@ -3,11 +3,12 @@ class Tile
   DEACTIVE_TIME = 300
   STATUS = %i[unknown inactive active].freeze
 
-  attr_reader :x, :y, :deactive_at, :status
+  attr_reader :x, :y, :deactive_at, :status, :map
 
-  def initialize(x, y, _options = {})
+  def initialize(x, y, options = {})
     @x = x
     @y = y
+    @map = options[:map]
     initial_status
   end
 
@@ -52,6 +53,14 @@ class Tile
 
   def neighbour_activated
     deactive
+  end
+
+  def pos_x
+    (x / tile_size).to_i
+  end
+
+  def pos_y
+    (y / tile_size).to_i
   end
 
   private

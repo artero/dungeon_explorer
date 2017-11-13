@@ -21,32 +21,32 @@ class Map
     pos_x = (x / tile_size).to_i
     pos_y = (y / tile_size).to_i
 
-    if some_closed_know?(pos_x, pos_y) && !tile(pos_x, pos_y).know?
-      tile(pos_x, pos_y).actioning
-      # binding.pry
-      neighbour_tiles(pos_x, pos_y).each(&:neighbour_activated) if tile(pos_x, pos_y).explorable?
-    end
+    return unless some_closed_know?(pos_x, pos_y) && !tile(pos_x, pos_y).know?
+    tile(pos_x, pos_y).actioning
+
+    return unless tile(pos_x, pos_y).explorable?
+    neighbour_tiles(pos_x, pos_y).each(&:neighbour_activated)
   end
 
   def neighbour_tiles(pos_x, pos_y)
     neighbours = []
-    neighbours << tile(pos_x-1, pos_y-1)
-    neighbours << tile(pos_x-1, pos_y)
-    neighbours << tile(pos_x-1, pos_y+1)
-    neighbours << tile(pos_x, pos_y-1)
-    neighbours << tile(pos_x, pos_y+1)
-    neighbours << tile(pos_x+1, pos_y-1)
-    neighbours << tile(pos_x+1, pos_y)
-    neighbours << tile(pos_x+1, pos_y+1)
+    neighbours << tile(pos_x - 1, pos_y - 1)
+    neighbours << tile(pos_x - 1, pos_y)
+    neighbours << tile(pos_x - 1, pos_y + 1)
+    neighbours << tile(pos_x, pos_y - 1)
+    neighbours << tile(pos_x, pos_y + 1)
+    neighbours << tile(pos_x + 1, pos_y - 1)
+    neighbours << tile(pos_x + 1, pos_y)
+    neighbours << tile(pos_x + 1, pos_y + 1)
     neighbours.compact
   end
-
-  private
 
   def tile(pos_x, pos_y)
     # puts "- x: #{x}, y: #{y} - Tile: #{tile_position} => (#{pos_x}, #{pos_y}))"
     tiles[pos_x + ((pos_y % size_y) * size_x)]
   end
+
+  private
 
   def initialize_tiles
     y_i = 0
