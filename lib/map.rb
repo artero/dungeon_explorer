@@ -49,16 +49,12 @@ class Map
   private
 
   def initialize_tiles
-    y_i = 0
-    @map_code.each do |row|
-      x_i = 0
-      row.each do |code|
+    @map_code.each_with_index do |row, y_i|
+      row.each_with_index do |code, x_i|
         tiles << tile_class(code).new(x_i * tile_size,
                                       y_i * tile_size,
                                       map: self)
-        x_i += 1
       end
-      y_i += 1
     end
     @tiles
   end
